@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
 import InputGroup from "../common/InputGroup";
+import { createProfile } from "../../actions/profileActions";
 
 class CreateProfile extends Component {
   state = {
@@ -24,13 +26,36 @@ class CreateProfile extends Component {
     errors: {}
   };
 
+  static getDerivedStateFromProps(nextProps) {
+    if (nextProps.errors) {
+      return { errors: nextProps.errors };
+    } else {
+      return null;
+    }
+  }
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
   onSubmit = e => {
     e.preventDefault();
-    console.log("submit");
+    const profileData = {
+      handle: this.state.handle,
+      company: this.state.company,
+      website: this.state.website,
+      location: this.state.location,
+      status: this.state.status,
+      skills: this.state.skills,
+      githubusername: this.state.githubusername,
+      bio: this.state.bio,
+      twitter: this.state.twitter,
+      facebook: this.state.facebook,
+      linkedin: this.state.linkedin,
+      youtube: this.state.youtube,
+      instagram: this.state.instagram
+    };
+    this.props.createProfile(profileData, this.props.history);
   };
 
   render() {
@@ -95,10 +120,10 @@ class CreateProfile extends Component {
     ];
 
     return (
-      <div className="creact-profile">
+      <div className="create-profile">
         <div className="container">
           <div className="row">
-            <div className col-md-8 m-auto>
+            <div className="col-md-8 m-auto">
               <h1 className="display-4 text-center">Create your Profile</h1>
               <p className="lead text-center">
                 let's get some information to make your profile stand out
@@ -115,7 +140,7 @@ class CreateProfile extends Component {
                 />
                 <SelectListGroup
                   placeholder="Status"
-                  name="Status"
+                  name="status"
                   value={this.state.status}
                   onChange={this.onChange}
                   options={options}
@@ -169,6 +194,7 @@ class CreateProfile extends Component {
                 />
                 <div className="mb-3">
                   <button
+                    type="button"
                     onClick={() => {
                       this.setState(prevState => ({
                         displaySocialInputs: !prevState.displaySocialInputs
@@ -199,4 +225,7 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(
+  mapStateToProps,
+  { createProfile }
+)(withRouter(CreateProfile));

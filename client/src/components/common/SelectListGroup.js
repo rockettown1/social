@@ -9,11 +9,13 @@ const SelectListGroup = ({
   onChange,
   options
 }) => {
-  const selectOptions = options.map(option => (
-    <option key={option.label} value={option.value}>
-      {option.label}
-    </option>
-  ));
+  const selectOptions = options.map(option => {
+    return (
+      <option key={option.label} value={option.value}>
+        {option.label}
+      </option>
+    );
+  });
   return (
     <div className="form-group">
       <select
@@ -22,6 +24,7 @@ const SelectListGroup = ({
           "form-control-lg",
           error ? "is-invalid" : error
         ].join(" ")}
+        placeholder={placeholder}
         name={name}
         value={value}
         onChange={onChange}
